@@ -48,6 +48,13 @@ test('Missing All Fields', async () => {
     await register.checkError(["firstname is required.", "lastname is required.","passwd is required.","email is required."])
 
 });
+
+test.only("Invalid password", async()=>{
+    const register = new signUpPage(page);
+    await register.fillForm({firstname:userFirstName ,lastname: userLastName, email: userEmail, password: "abc"})
+    await register.submitRegistration()
+    await register.checkError(["passwd is invalid."])
+})
 test.skip('Missing FirstName1', async () => {
     const register = new signUpPage(page);
     await register.selectGender(userGender);
@@ -55,5 +62,4 @@ test.skip('Missing FirstName1', async () => {
     await register.selectBirthDate(userBirthDay)
     await register.checkboxes({newsletter: newsLetterCheck, offers: offersCheck})
     await page.waitForTimeout(5000);
-
 });
