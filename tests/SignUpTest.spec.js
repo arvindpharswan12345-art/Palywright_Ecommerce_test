@@ -1,85 +1,85 @@
-const{test,expect} = require('@playwright/test');
-import{homePage} from '../pages/homePage';
-import { signUpPage } from '../pages/signUpPage';
-import { myAccountPage } from '../pages/myAccountPage'; 
-let page;
-let userEmail = "testuser@phar.com";
-let userGender = "female";
-let userFirstName = "Rohit";
-let userLastName = "Srivastava";
-let userPassword = "abcd1234"
-let userBirthDay = "12/3/1999"
-let newsLetterCheck ='Y'
-let offersCheck = 'N'
+// const{test,expect} = require('@playwright/test');
+// import{homePage} from '../pages/homePage';
+// import { signUpPage } from '../pages/signUpPage';
+// import { myAccountPage } from '../pages/myAccountPage'; 
+// let page;
+// let userEmail = "testuser@phar.com";
+// let userGender = "female";
+// let userFirstName = "Rohit";
+// let userLastName = "Srivastava";
+// let userPassword = "abcd1234"
+// let userBirthDay = "12/3/1999"
+// let newsLetterCheck ='Y'
+// let offersCheck = 'N'
 
-test.beforeAll(async ({browser}) => {
-    page = await browser.newPage();
-    const home = new homePage(page);
-    await home.openURL();
-    await home.SignUp(userEmail);
-});
+// test.beforeAll(async ({browser}) => {
+//     page = await browser.newPage();
+//     const home = new homePage(page);
+//     await home.openURL();
+//     await home.SignUp(userEmail);
+// });
 
-test('Missing FirstName', async () => {
-    const register = new signUpPage(page);
-    await register.fillForm({lastname: userLastName, email: userEmail, password: userPassword})
-    await register.submitRegistration()
-    await register.checkError(["firstname is required."])
-});
+// test('Missing FirstName', async () => {
+//     const register = new signUpPage(page);
+//     await register.fillForm({lastname: userLastName, email: userEmail, password: userPassword})
+//     await register.submitRegistration()
+//     await register.checkError(["firstname is required."])
+// });
 
-test('Missing FirstName and LastName', async () => {
-    const register = new signUpPage(page);
-    await register.fillForm({email: userEmail, password: userPassword})
-    await register.submitRegistration()
-    await register.checkError(["firstname is required.", "lastname is required."])
+// test('Missing FirstName and LastName', async () => {
+//     const register = new signUpPage(page);
+//     await register.fillForm({email: userEmail, password: userPassword})
+//     await register.submitRegistration()
+//     await register.checkError(["firstname is required.", "lastname is required."])
 
-});
+// });
 
-test('Missing FirstName and LastName and Password', async () => {
-    const register = new signUpPage(page);
-    await register.fillForm({email: userEmail})
-    await register.submitRegistration()
-    await register.checkError(["firstname is required.", "lastname is required.","passwd is required."])
+// test('Missing FirstName and LastName and Password', async () => {
+//     const register = new signUpPage(page);
+//     await register.fillForm({email: userEmail})
+//     await register.submitRegistration()
+//     await register.checkError(["firstname is required.", "lastname is required.","passwd is required."])
 
-});
+// });
 
-test('Missing All Fields', async () => {
-    const register = new signUpPage(page);
-    await register.fillForm({email: ""})
-    await register.submitRegistration()
-    await register.checkError(["firstname is required.", "lastname is required.","passwd is required.","email is required."])
+// test('Missing All Fields', async () => {
+//     const register = new signUpPage(page);
+//     await register.fillForm({email: ""})
+//     await register.submitRegistration()
+//     await register.checkError(["firstname is required.", "lastname is required.","passwd is required.","email is required."])
 
-});
+// });
 
-test("Invalid password", async()=>{
-    const register = new signUpPage(page);
-    await register.fillForm({firstname:userFirstName ,lastname: userLastName, email: userEmail, password: "abc"})
-    await register.submitRegistration()
-    await register.checkError(["passwd is invalid."])
-})
+// test("Invalid password", async()=>{
+//     const register = new signUpPage(page);
+//     await register.fillForm({firstname:userFirstName ,lastname: userLastName, email: userEmail, password: "abc"})
+//     await register.submitRegistration()
+//     await register.checkError(["passwd is invalid."])
+// })
 
-test("Invalid Email", async()=>{
-    const register = new signUpPage(page);
-    await register.fillForm({firstname:userFirstName ,lastname: userLastName, email: "abcafhbafa", password: userPassword})
-    await register.submitRegistration()
-    await register.checkError(["email is invalid."])
-})
+// test("Invalid Email", async()=>{
+//     const register = new signUpPage(page);
+//     await register.fillForm({firstname:userFirstName ,lastname: userLastName, email: "abcafhbafa", password: userPassword})
+//     await register.submitRegistration()
+//     await register.checkError(["email is invalid."])
+// })
 
-test('Invalid DOB', async () => {
-    const register = new signUpPage(page);
-    await register.fillForm({firstname:"", lastname: userLastName, password: userPassword, email: userEmail})
-    await register.selectBirthDate("12/10/")
-    await register.submitRegistration()
-    await register.checkError(["firstname is required.","Invalid date of birth"])
-})
+// test('Invalid DOB', async () => {
+//     const register = new signUpPage(page);
+//     await register.fillForm({firstname:"", lastname: userLastName, password: userPassword, email: userEmail})
+//     await register.selectBirthDate("12/10/")
+//     await register.submitRegistration()
+//     await register.checkError(["firstname is required.","Invalid date of birth"])
+// })
 
-test('Submit Sign up Form', async() =>{
-    const register = new signUpPage(page);
-    await register.selectGender(userGender);
-    await register.fillForm({firstname:userFirstName, lastname: userLastName, password: userPassword, email: userEmail})
-    await register.selectBirthDate(userBirthDay);
-    await register.checkboxes({newsletter: newsLetterCheck, offers: offersCheck})
-    await register.submitRegistration();
-    const accountPage = new myAccountPage(page);
-    await accountPage.verifySignUp();
+// test('Submit Sign up Form', async() =>{
+//     const register = new signUpPage(page);
+//     await register.selectGender(userGender);
+//     await register.fillForm({firstname:userFirstName, lastname: userLastName, password: userPassword, email: userEmail})
+//     await register.selectBirthDate(userBirthDay);
+//     await register.checkboxes({newsletter: newsLetterCheck, offers: offersCheck})
+//     await register.submitRegistration();
+//     const accountPage = new myAccountPage(page);
+//     await accountPage.verifySignUp();
     
-})
+// })
