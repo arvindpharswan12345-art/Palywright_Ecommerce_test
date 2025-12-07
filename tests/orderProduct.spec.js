@@ -11,6 +11,7 @@ let userPassword = "abcd1234"
 let userBirthDay = "29/3/1996"
 let newsLetterCheck ='Y'
 let offersCheck = 'N'
+let product = "Dress"
 
 test.beforeAll(async ({browser}) => {
     page = await browser.newPage();
@@ -51,6 +52,16 @@ test('TC-004: Login With Invalid Credentials', async()=>{
     const authenticationError = new signUpPage(page);
     await authenticationError.checkError(["Authentication failed."]);
 })
+
+test('TC-005: Search for a Product', async()=>{
+    const home = new homePage(page);
+    await home.userLogin(userEmail, userPassword);
+    await home.searchProduct(product);
+    await page.waitForTimeout(3000);
+})
+
+
+
 
 
 
