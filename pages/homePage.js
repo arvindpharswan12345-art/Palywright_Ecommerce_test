@@ -49,4 +49,15 @@ exports.homePage = class homePage{
         }
         await expect(productMatching).toBeTruthy();
     }
+
+    async openProduct(product){
+        const productList = await this.page.$$(this.searchedProductNames);
+        for (let product1 of productList) {
+            const text = await product1.textContent();
+            if(text.trim() === product){
+                await product1.click();
+                break;
+            } 
+        }
+    }
 }

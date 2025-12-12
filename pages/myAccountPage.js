@@ -30,4 +30,4 @@ exports.myAccountPage = class myAccountPage{
     async userLogout(){
         await this.page.locator(this.logout).click();
     }
-}
+} 

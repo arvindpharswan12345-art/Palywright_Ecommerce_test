@@ -2,6 +2,7 @@ const{test,expect} = require('@playwright/test');
 import{homePage} from '../pages/homePage';
 import { signUpPage } from '../pages/signUpPage';
 import { myAccountPage } from '../pages/myAccountPage'; 
+import { productPage } from '../pages/productPage';
 let page;
 let userEmail = "testuser@chainmail.com";
 let userGender = "female";
@@ -11,9 +12,10 @@ let userPassword = "abcd1234"
 let userBirthDay = "29/3/1996"
 let newsLetterCheck ='Y'
 let offersCheck = 'N'
-let product = "Dress"
+let searchProduct = "Dress"
+let selectProduct = "Printed Chiffon Dress"
 
-test.beforeAll(async ({browser}) => {
+test.beforeEach(async ({browser}) => {
     page = await browser.newPage();
     const home = new homePage(page);
     await home.openURL();
@@ -40,9 +42,10 @@ test('TC-002: Login With Valid Credentials', async()=>{
 })
 
 test('TC-003: Logout', async()=>{
+    const home = new homePage(page);
+    await home.userLogin(userEmail, userPassword);
     const accountPage = new myAccountPage(page);
     await accountPage.userLogout();
-    const home = new homePage(page);
     await home.verifyLogout();
 })
 
@@ -56,9 +59,28 @@ test('TC-004: Login With Invalid Credentials', async()=>{
 test('TC-005: Search for a Product', async()=>{
     const home = new homePage(page);
     await home.userLogin(userEmail, userPassword);
-    await home.searchProduct(product);
-    await page.waitForTimeout(3000);
+    await home.searchProduct(searchProduct);
 })
+
+test('TC-006: View Product Details', async()=>{
+    const home = new homePage(page);
+    await home.userLogin(userEmail, userPassword);
+    await home.searchProduct(searchProduct);
+    await home.openProduct(selectProduct);
+    const details = new productPage(page);
+    await details.verifyProductDetails(selectProduct);
+})
+
+test('TC-007: Filter Product Size and Color In Stock', async()=>{
+    const home = new homePage(page);
+    const details = new productPage(page);
+    await home.userLogin(userEmail, userPassword);
+    await home.searchProduct(searchProduct);
+    await home.openProduct(selectProduct);
+    await details.filterProduct();
+})
+
+
 
 
 
