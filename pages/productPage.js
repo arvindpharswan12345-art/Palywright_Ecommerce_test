@@ -13,6 +13,7 @@ exports.productPage = class productPage{
         this.cartMessages ='//div[@class="clearfix"]//h2'
         this.cartImage ='//img[@class="layer_cart_img img-responsive"]'
         this.cartProduct = '//span[@id="layer_cart_product_title"]'
+        this.cartPopupClose ='//span[@class="cross"]'
     }
 
     async verifyProductDetails(productName){
@@ -66,5 +67,6 @@ exports.productPage = class productPage{
         await expect.soft(cartHeadings.first()).toContainText('Product successfully added to your shopping cart');
         await expect.soft(productImage).toHaveAttribute('title', product);
         await expect.soft(productName).toContainText(product);
+        await this.page.click(this.cartPopupClose);
     }
 }

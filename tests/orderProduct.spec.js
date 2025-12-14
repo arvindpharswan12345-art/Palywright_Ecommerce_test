@@ -3,6 +3,7 @@ import{homePage} from '../pages/homePage';
 import { signUpPage } from '../pages/signUpPage';
 import { myAccountPage } from '../pages/myAccountPage'; 
 import { productPage } from '../pages/productPage';
+import { cartPage } from '../pages/cartPage';
 let page;
 let userEmail = "testuser@chainmail.com";
 let userGender = "female";
@@ -88,7 +89,19 @@ test('TC-008: Add Product to Cart', async()=>{
     await home.openProduct(selectProduct);
     await details.filterProduct();
     await details.addProductToCart(selectProduct);
-    await page.waitForTimeout(2000)
+})
+
+test('TC-009: Increase Product Quantity in Cart', async()=>{
+    const home = new homePage(page);
+    const details = new productPage(page);
+    const cart = new cartPage(page);
+    await home.userLogin(userEmail, userPassword);
+    await home.searchProduct(searchProduct);
+    await home.openProduct(selectProduct);
+    await details.filterProduct();
+    await details.addProductToCart(selectProduct);
+    await cart.openCart();
+    await cart.increaseProductQuantity(selectProduct);
 })
 
 
