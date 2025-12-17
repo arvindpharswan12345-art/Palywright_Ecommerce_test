@@ -12,6 +12,8 @@ exports.homePage = class homePage{
         this.productSearch ='//input[@id="search_query_top"]';
         this.searchIcon ='//button[@name="submit_search"]';
         this.searchedProductNames = '//div[@class ="product-container"]//a[@class="product-name"]'
+        this.seachHeading = '//h1[@class="page-heading  product-listing"]'
+
     }
     async openURL(){
         await this.page.goto('http://www.automationpractice.pl/index.php');
@@ -37,6 +39,7 @@ exports.homePage = class homePage{
     async searchProduct(product){
         await this.page.fill(this.productSearch, product);
         await this.page.click(this.searchIcon);
+        await expect(this.page.locator(this.seachHeading)).toBeVisible();
         const productList = this.page.locator(this.searchedProductNames);
         const count = await productList.count();
         let productMatching = false;
@@ -60,4 +63,6 @@ exports.homePage = class homePage{
             } 
         }
     }
+
+
 }

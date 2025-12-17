@@ -14,6 +14,7 @@ exports.productPage = class productPage{
         this.cartImage ='//img[@class="layer_cart_img img-responsive"]'
         this.cartProduct = '//span[@id="layer_cart_product_title"]'
         this.cartPopupClose ='//span[@class="cross"]'
+        this.cartCheckout ='//div[@class="button-container"]/a[@title="Proceed to checkout"]'
     }
 
     async verifyProductDetails(productName){
@@ -68,5 +69,17 @@ exports.productPage = class productPage{
         await expect.soft(productImage).toHaveAttribute('title', product);
         await expect.soft(productName).toContainText(product);
         await this.page.click(this.cartPopupClose);
+    }
+    async addProductandCheckout(product){
+        const cart = this.page.locator(this.cartPopup);
+        const cartHeadings = this.page.locator(this.cartMessages);
+        const productImage = this.page.locator(this.cartImage);
+        const productName =this.page.locator(this.cartProduct);
+        await this.page.click(this.addToCartButton);
+        await expect.soft(cart).toBeVisible();
+        await expect.soft(cartHeadings.first()).toContainText('Product successfully added to your shopping cart');
+        await expect.soft(productImage).toHaveAttribute('title', product);
+        await expect.soft(productName).toContainText(product);
+        await this.page.click(this.cartCheckout);
     }
 }

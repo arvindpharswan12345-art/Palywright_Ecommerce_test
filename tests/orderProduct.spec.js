@@ -16,6 +16,15 @@ let offersCheck = 'N'
 let searchProduct = "Dress"
 let firstProduct = "Printed Chiffon Dress"
 let secondProduct = "Printed Summer Dress"
+let address = {
+    adress: "821 3rd Lane Manhattan",
+    city: "New York",
+    state: "New York",
+    zipcode: "82044",
+    homePhone: "01 2428 242134",
+    mobilePhone: "01 23322 13123",
+    addressAlias: "Home"
+}
 
 
 test.beforeEach(async ({browser}) => {
@@ -35,6 +44,14 @@ test.skip('TC-001: User Registration', async() =>{
     await register.submitRegistration();
     const accountPage = new myAccountPage(page);
     await accountPage.verifySignIn();
+    await accountPage.addAddress(address);
+})
+
+test('Add Address', async()=>{
+    const home = new homePage(page);
+    await home.userLogin(userEmail, userPassword);
+    const accountPage = new myAccountPage(page);
+    await accountPage.verifySignIn();    
 })
 
 test('TC-002: Login With Valid Credentials', async()=>{
@@ -134,6 +151,29 @@ test('TC-011: Verify Product Price Calculation', async()=>{
     await details.addProductToCart(secondProduct);
     await cart.openCart();
     await cart.verifyPriceCalculation();
+})
+
+test('TC-012: Checkout – Summary Step', async()=>{
+    const home = new homePage(page);
+    const details = new productPage(page);
+    const cart = new cartPage(page);
+    await home.searchProduct(searchProduct);
+    await home.openProduct(firstProduct);
+    await details.filterProduct();
+    await details.addProductandCheckout(firstProduct);
+    await cart.verifySummary(firstProduct);
+})
+
+test.only('Checkout – Sign in Step (If not logged in)', async()=>{
+    const home = new homePage(page);
+    const details = new productPage(page);
+    const cart = new cartPage(page);
+    await home.searchProduct(searchProduct);
+    await home.openProduct(firstProduct);
+    await details.filterProduct();
+    await details.addProductandCheckout(firstProduct);
+    await cart.verifySummary(firstProduct);
+    await cart.signIn(userEmail, userPassword);
 })
 
 

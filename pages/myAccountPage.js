@@ -20,6 +20,18 @@ exports.myAccountPage = class myAccountPage{
         this.errorMessage ='//div[@class="alert alert-danger"]'
         this.errorList ='//div[@class="alert alert-danger"]//li'
         this.logout ='//a[@class="logout"]'
+        this.firstAddress = '//span[normalize-space()="Add my first address"]'
+        this.adressInputBox ='//input[@id="address1"]';
+        this.city = '//input[@id="city"]';
+        this.state = '//select[@id="id_state"]';
+        this.zipcode = '//input[@id="postcode"]';
+        this.homePhone = '//input[@id="phone"]';
+        this.mobilePhone = '//input[@id="phone_mobile"]'
+        this.company = '//input[@id="company"]'
+        this.adressLine2 = '//input[@id="address2"]'
+        this.additionalInformation = '//textarea[@id="other"]';
+        this.addressAlias= '//input[@id="alias"]'
+        this.saveAddress = '//button[@id="submitAddress"]'
     }
     
     async verifySignIn(){
@@ -29,5 +41,31 @@ exports.myAccountPage = class myAccountPage{
 
     async userLogout(){
         await this.page.locator(this.logout).click();
+    }
+
+        async safeFill(locator, value) {
+        if(value==undefined){
+            value=""
+        }
+        if (value !== undefined) {
+            await this.page.locator(locator).clear();
+            await this.page.locator(locator).type(value, {delay: 50});
+            await this.page.locator(locator).press('Tab');
+        }
+    }
+
+    async addAddress(data) {
+        await this.page.click(this.firstAddress);
+        await this.safeFill(this.adressInputBox, data.adress);
+        await this.safeFill(this.adressLine2, data.adressline2);
+        await this.safeFill(this.city, data.city);
+        await this.safeFill(this.zipcode, data.zipcode);
+        await this.safeFill(this.homePhone, data.homePhone);
+        await this.safeFill(this.mobilePhone, data.mobilePhone);
+        await this.safeFill(this.company, data.company);
+        await this.safeFill(this.additionalInformation, data.additionalInformation);
+        await this.safeFill(this.addressAlias, data.addressAlias);
+        await this.page.locator(this.state).selectOption({label: data.state})
+        await this.page.click(this.saveAddress)
     }
 } 
