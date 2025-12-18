@@ -4,6 +4,7 @@ import { signUpPage } from '../pages/signUpPage';
 import { myAccountPage } from '../pages/myAccountPage'; 
 import { productPage } from '../pages/productPage';
 import { cartPage } from '../pages/cartPage';
+import { checkoutPage } from '../pages/checkoutPage';
 let page;
 let userEmail = "testuser@chainmail.com";
 let userGender = "female";
@@ -17,7 +18,7 @@ let searchProduct = "Dress"
 let firstProduct = "Printed Chiffon Dress"
 let secondProduct = "Printed Summer Dress"
 let address = {
-    adress: "821 3rd Lane Manhattan",
+    address: "821 3rd Lane Manhattan",
     city: "New York",
     state: "New York",
     zipcode: "82044",
@@ -45,13 +46,6 @@ test.skip('TC-001: User Registration', async() =>{
     const accountPage = new myAccountPage(page);
     await accountPage.verifySignIn();
     await accountPage.addAddress(address);
-})
-
-test('Add Address', async()=>{
-    const home = new homePage(page);
-    await home.userLogin(userEmail, userPassword);
-    const accountPage = new myAccountPage(page);
-    await accountPage.verifySignIn();    
 })
 
 test('TC-002: Login With Valid Credentials', async()=>{
@@ -164,7 +158,7 @@ test('TC-012: Checkout – Summary Step', async()=>{
     await cart.verifySummary(firstProduct);
 })
 
-test.only('Checkout – Sign in Step (If not logged in)', async()=>{
+test('Checkout – Sign in Step (If not logged in)', async()=>{
     const home = new homePage(page);
     const details = new productPage(page);
     const cart = new cartPage(page);
@@ -172,8 +166,42 @@ test.only('Checkout – Sign in Step (If not logged in)', async()=>{
     await home.openProduct(firstProduct);
     await details.filterProduct();
     await details.addProductandCheckout(firstProduct);
-    await cart.verifySummary(firstProduct);
+    await cart.proceedToCheckout();
     await cart.signIn(userEmail, userPassword);
+})
+
+test('TC-014: Checkout – Address Step', async()=>{
+    const home = new homePage(page);
+    const details = new productPage(page);
+    const cart = new cartPage(page);
+    const checkout =new checkoutPage(page);
+    await home.searchProduct(searchProduct);
+    await home.openProduct(firstProduct);
+    await details.filterProduct();
+    await details.addProductandCheckout(firstProduct);
+    await cart.proceedToCheckout();
+    await checkout.signIn(userEmail, userPassword);
+    await checkout.verifyDeliveryAddress(address);
+    await checkout.verifyBillingAddress(address);
+    await checkout.proceedToCheckout();
+})
+
+test('TC-015: Checkout – Shipping Step',async()=>{
+    const home = new homePage(page);
+    const details = new productPage(page);
+    const cart = new cartPage(page);
+    const checkout =new checkoutPage(page);
+    await home.searchProduct(searchProduct);
+    await home.openProduct(firstProduct);
+    await details.filterProduct();
+    await details.addProductandCheckout(firstProduct);
+    await cart.proceedToCheckout();
+    await checkout.signIn(userEmail, userPassword);
+    await checkout.proceedToCheckout();
+    await checkout.proceedWithoutTerms();
+    await checkout.acceptTerms();
+    await checkout.proceedToCheckout();
+    await page.waitForTimeout(3000);
 })
 
 

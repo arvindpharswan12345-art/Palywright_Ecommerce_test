@@ -16,10 +16,7 @@ exports.cartPage =class cartPage{
         this.totalCartPrice ='//span[@id="total_price"]';
         this.productName = '//td/p[@class="product-name"]/a';
         this.emptyCart ='//p[@class="alert alert-warning"]';
-        this.proceedToCheckout = '//p[@class="cart_navigation clearfix"]//a[@title="Proceed to checkout"]'
-        this.userEmail = '//input[@id="email"]';
-        this.userPassword = '//input[@id="passwd"]';
-        this.submitLogin ='//button[@id="SubmitLogin"]';
+        this.Checkout = '//p[@class="cart_navigation clearfix"]//a[@title="Proceed to checkout"]'
     }
 
     async openCart(){
@@ -112,13 +109,8 @@ exports.cartPage =class cartPage{
         })
         await expect.soft(requiredRow).toBeVisible();
     }
-    
-    async signIn(email, password){
-        await this.page.click(this.proceedToCheckout);
-        await this.page.locator(this.userEmail).fill(email);
-        await this.page.locator(this.userPassword).fill(password);
-        await this.page.click(this.submitLogin);
+
+    async proceedToCheckout(){
+        await this.page.click(this.Checkout);
     }
-
-
 }

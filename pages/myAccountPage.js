@@ -43,7 +43,7 @@ exports.myAccountPage = class myAccountPage{
         await this.page.locator(this.logout).click();
     }
 
-        async safeFill(locator, value) {
+    async safeFill(locator, value) {
         if(value==undefined){
             value=""
         }
@@ -56,7 +56,7 @@ exports.myAccountPage = class myAccountPage{
 
     async addAddress(data) {
         await this.page.click(this.firstAddress);
-        await this.safeFill(this.adressInputBox, data.adress);
+        await this.safeFill(this.adressInputBox, data.address);
         await this.safeFill(this.adressLine2, data.adressline2);
         await this.safeFill(this.city, data.city);
         await this.safeFill(this.zipcode, data.zipcode);
