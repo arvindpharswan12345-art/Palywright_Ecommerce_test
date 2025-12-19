@@ -236,7 +236,6 @@ test('TC-017: Order Confirmation',async()=>{
     await home.openProduct(firstProduct);
     await details.filterProduct();
     await details.addProductandCheckout(firstProduct);
-    totalCartPrice = await cart.getTotalPrice();
     await cart.proceedToCheckout();
     await checkout.signIn(userEmail, userPassword);
     await checkout.proceedToCheckout();
@@ -244,7 +243,6 @@ test('TC-017: Order Confirmation',async()=>{
     await checkout.proceedToCheckout();
     await checkout.selectPaymentMethod(paymentMethod);
     await checkout.confirmOrder();
-    orderReference = await checkout.getReference();
 })
 
 test('TC-018: View Order History', async()=>{
