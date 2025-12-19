@@ -45,7 +45,7 @@ exports.signUpPage = class signUpPage{
         }
         if (value !== undefined) {
             await this.page.locator(locator).clear();
-            await this.page.locator(locator).type(value, {delay: 50});
+            await this.page.locator(locator).type(value, {delay: 10});
             await this.page.locator(locator).press('Tab');
         }
     }

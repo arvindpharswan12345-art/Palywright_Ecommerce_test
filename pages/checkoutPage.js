@@ -18,6 +18,13 @@ exports.checkoutPage =class checkoutPage{
         this.termsCheckBox = '//input[@id="cgv"]';
         this.termsError = '//p[@class="fancybox-error"]'
         this.errorClose ='//a[@class="fancybox-item fancybox-close"]'
+        this.bankWire = '//a[@class="bankwire"]'
+        this.cheque ='//a[@class="cheque"]'
+        this.paymentHeading = '//h3[@class = "page-subheading"]';
+        this.orderConfirmationButton = '//button[normalize-space()="I confirm my order"]';
+        this.orderConfirmationAlert = '//p[@class="alert alert-success"]'
+        this.orderReference = '//div[contains(@class,"box")]';
+
     }
     
     async signIn(email, password){
@@ -74,4 +81,27 @@ exports.checkoutPage =class checkoutPage{
         await expect(checkbox).toBeChecked();
     }
 
+    async getReference(){
+        const text = await this.page.locator(this.orderReference).textContent();
+        const match = text.match(/order reference\s+([A-Z0-9]+)/i);
+        const orderReference = match ? match[1] : null;
+        return orderReference;
+    }
+
+    async selectPaymentMethod(payment){
+        const paymentTitle = this.page.locator(this.paymentHeading);
+        if(payment== "Bank-wire payment"){
+            await this.page.click(this.bankWire);
+        }
+        else if (payment== "Check payment"){
+            await this.page.click(this.cheque);
+        }
+        await expect.soft(paymentTitle).toHaveText(payment);
+    }
+
+    async confirmOrder(){
+        await this.page.click(this.orderConfirmationButton);
+        const confirmationAlert = this.page.locator(this.orderConfirmationAlert);
+        await expect.soft(confirmationAlert).toHaveText("Your order on My Shop is complete.")
+    }
 }

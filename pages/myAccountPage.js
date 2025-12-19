@@ -32,6 +32,15 @@ exports.myAccountPage = class myAccountPage{
         this.additionalInformation = '//textarea[@id="other"]';
         this.addressAlias= '//input[@id="alias"]'
         this.saveAddress = '//button[@id="submitAddress"]'
+        this.myAccount = '//a[@class="account"]'
+        this.myOrders = '//a[@title="Orders"]';
+        this.orderTable ='//table[@id="order-list"]';
+        this.orderTableRow = '//tbody/tr';
+        this.orderReference = '//a[@class="color-myaccount"]';
+        this.orderDate = '//td[@class="history_date bold"]'
+        this.orderPrice = '//td[@class="history_price"]'
+        this.orderDetailsHeading = '//form[@id="submitReorder"]/p';
+        this.orderInfoBox ='//div[@class="info-order box"]'
     }
     
     async verifySignIn(){
@@ -49,7 +58,7 @@ exports.myAccountPage = class myAccountPage{
         }
         if (value !== undefined) {
             await this.page.locator(locator).clear();
-            await this.page.locator(locator).type(value, {delay: 50});
+            await this.page.locator(locator).type(value, {delay: 10});
             await this.page.locator(locator).press('Tab');
         }
     }
@@ -67,5 +76,33 @@ exports.myAccountPage = class myAccountPage{
         await this.safeFill(this.addressAlias, data.addressAlias);
         await this.page.locator(this.state).selectOption({label: data.state})
         await this.page.click(this.saveAddress)
+    }
+    async openMyOrders(){
+        await this.page.click(this.myOrders);
+    }
+
+    async verifyOrderHistory(reference, value, date){
+        const tablerow = this.page.locator(this.orderTableRow);
+        const requiredRow = tablerow.filter({
+            has: this.page.locator('td'),
+            hasText: reference
+        })
+        const dateOfOrder = requiredRow.locator(this.orderDate);
+        const priceOfOrder = requiredRow.locator(this.orderPrice);
+        await expect.soft(dateOfOrder).toHaveText(date);
+        await expect.soft(priceOfOrder).toHaveText(value);
+    }
+
+    async verifyOrderDetails(reference){
+        const tablerow = this.page.locator(this.orderTableRow);
+        const requiredRow = tablerow.filter({
+            has: this.page.locator('td'),
+            hasText: reference
+        })
+        await requiredRow.locator(this.orderReference).click();
+        await expect.soft(this.page.locator(this.orderDetailsHeading)).toContainText(reference)
+        const orderInfo = await this.page.locator(this.orderInfoBox);
+        await expect.soft(orderInfo).toContainText('Carrier My carrier');
+        await expect.soft(orderInfo).toContainText('Payment method Bank wire');
     }
 } 

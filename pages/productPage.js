@@ -29,6 +29,13 @@ exports.productPage = class productPage{
 
     }
 
+    async OutOfStockToCart(){
+        const availability = this.page.locator(this.productAvailability);
+        await expect(availability).toHaveText('This product is no longer in stock');
+        const cartButton = this.page.locator(this.addToCartButton)
+        await expect(cartButton).not.toBeVisible();
+    }
+
     async filterProduct(){
         let exit = false;
         let selectIndex = 0;

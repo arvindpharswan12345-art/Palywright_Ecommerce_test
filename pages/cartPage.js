@@ -80,6 +80,11 @@ exports.cartPage =class cartPage{
         }
     }
 
+    async getTotalPrice(){
+        const priceText = await this.page.locator(this.totalCartPrice).textContent();
+        return priceText;
+    }
+
     async verifyPriceCalculation(){
         const productRow = this.page.locator(this.cartRow);
         await productRow.first().waitFor({ state: 'visible' });
