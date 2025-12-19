@@ -168,6 +168,7 @@ test('TC-013: Checkout – Sign in Step (If not logged in)', async()=>{
     const home = new homePage(page);
     const details = new productPage(page);
     const cart = new cartPage(page);
+    const checkout =new checkoutPage(page);
     await home.searchProduct(searchProduct);
     await home.openProduct(firstProduct);
     await details.filterProduct();
