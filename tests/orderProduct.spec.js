@@ -34,11 +34,11 @@ let totalCartPrice = "$23.40";
 let orderDate = "12/19/2025"
 
 
-// test.beforeEach(async ({browser}) => {
-//     page = await browser.newPage();
-//     const home = new homePage(page);
-//     await home.openURL();
-// });
+test.beforeEach(async ({browser}) => {
+    page = await browser.newPage();
+    const home = new homePage(page);
+    await home.openURL();
+});
 
 test.skip('TC-001: User Registration', async() =>{
     const home = new homePage(page);
