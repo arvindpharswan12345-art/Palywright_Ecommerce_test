@@ -39,7 +39,12 @@ pipeline {
 
     post {
         always {
-            junit '**/playwright-report/results.xml'
+            archiveArtifacts artifacts: 'playwright-report/**', allowEmptyArchive: true
+            publishHTML(target: [
+                reportDir: 'playwright-report',
+                reportFiles: 'index.html',
+                reportName: 'Playwright Test Report'
+            ])
         }
     }
 }
